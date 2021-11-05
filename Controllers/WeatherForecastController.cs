@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -40,9 +41,17 @@ namespace AspNetCoreWebApi.Controllers
 
 
     [HttpPost]
-        public ActionResult<string> Post([FromForm] string ipValue)
+        public ActionResult<string> Post([FromBody] JsonDocument ipJson)
         {
-            Console.WriteLine($"{ipValue} - {_contextId.Id}");
+            ipJson.RootElement.TryGetProperty("ipValue", out JsonElement ip);
+            ipJson.RootElement.TryGetProperty("ipOpt", out JsonElement opt);
+            
+            var id = _contextId.Id.ToString();
+            if (opt.ValueKind != JsonValueKind.Undefined){
+                id = opt.GetString();
+            }
+             
+            Console.WriteLine($"{ip.GetString()} - {id}");
             return Ok("teste");
         }
     }

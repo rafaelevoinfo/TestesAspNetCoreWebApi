@@ -2,5 +2,5 @@ using System;
 
 public class ContextId
 {
-    public Guid Id { get;} = Guid.NewGuid();
+    public Guid Id { get; set;} = Guid.NewGuid();
 }
